@@ -1,14 +1,24 @@
 import React from 'react';
 
-function TodoListFilter() {
+function TodoListFilter({ setfiltro, filtroAtual }) {
+  return (
+    <div>  
+      <button
+        onClick={() => setfiltro("all")} 
+        style={{ fontWeight: filtroAtual === "all" ? 'bold' : 'normal' }}
+      >All</button>  
 
-    return (
-      <div>  
-        <button>All</button>    
-        <button>Active</button>
-        <button>Completed</button>
-      </div>
-    );
-  }
+      <button
+        onClick={() => setfiltro("active")} 
+        style={{ fontWeight: filtroAtual === "active" ? 'bold' : 'normal' }}
+      >Active</button>
 
-  export default TodoListFilter;
+      <button
+        onClick={() => setfiltro("completed")} 
+        style={{ fontWeight: filtroAtual === "completed" ? 'bold' : 'normal' }}
+      >Completed</button>
+    </div>
+  );
+}
+
+export default TodoListFilter;
