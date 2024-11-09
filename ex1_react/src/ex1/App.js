@@ -1,4 +1,3 @@
-import './App.css';
 import TodoForm from './components/TodoForm';
 import TodoListFilter from './components/TodoListFilter';
 import React, { useState, useEffect } from 'react';
