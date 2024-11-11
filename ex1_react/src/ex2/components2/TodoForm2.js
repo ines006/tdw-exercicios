@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { TodosContext } from '../App2'; // Importa o contexto
+
 
 function TodoForm2(props) {
 
     const [input, setInput] = useState(''); 
+    const todos = useContext(TodosContext);
 
     return (
       <div>
-        <p>What needs to be done? 2</p>
+        <p>What needs to be done?</p>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)} //atualiza o valor do input
@@ -19,6 +22,8 @@ function TodoForm2(props) {
         >
             Add
         </button>
+
+        <p>ToDo's: {todos}</p>
       </div>
     );
   }
