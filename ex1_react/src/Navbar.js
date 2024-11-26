@@ -13,6 +13,10 @@ function Navbar() {
         <span><Link to="/ex2">Exercício 2</Link></span>
         <span> | </span>
         <span><Link to="/ex3">Exercício 3</Link></span>
+        <span> | </span>
+        <span><Link to="/ex4">Exercício 4</Link></span>
+        <span> | </span>
+        <span><Link to="/ex5">Exercício 5</Link></span>
       </ul>
     </nav>  
   );
