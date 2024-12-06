@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { TodosContext } from '../App2'; // Importa o contexto
+import { TodosContext } from '../App2'; 
 
 
 function TodoForm2(props) {

@@ -1,0 +1,3 @@
+[build]
+  publish = "ex1_react/build"  
+  command = "npm run build"  

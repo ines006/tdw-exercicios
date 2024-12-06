@@ -1,7 +1,7 @@
-import { configureStore, createSlice, createAsyncThunk  } from '@reduxjs/toolkit';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+// import { configureStore, createSlice, createAsyncThunk  } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import axios from 'axios';
 
 // ex3 - Multibanco
 const balanceSlice = createSlice({

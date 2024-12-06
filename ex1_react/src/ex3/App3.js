@@ -1,7 +1,6 @@
 
 import React, {useState} from 'react';
 import { useSelector, useDispatch  } from 'react-redux';
-import store from '../store';  
 import { deposito, levantamento } from '../store';  // Importa as actions
 
 function App3() {

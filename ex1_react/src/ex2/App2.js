@@ -1,6 +1,6 @@
 import TodoForm from './components2/TodoForm2';
 import TodoListFilter from './components2/TodoListFilter2';
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 
 export const TodosContext = createContext(); // Criar Contexto 
 
