@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd ex1_react
-          npm install
+          npm install --legacy-peer-deps
 
       - name: Run Build
         run: |
