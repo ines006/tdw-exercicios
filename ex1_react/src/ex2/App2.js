@@ -1,157 +1,187 @@
 import TodoForm from './components2/TodoForm2';
 import TodoListFilter from './components2/TodoListFilter2';
 import React, { useState, useEffect, createContext } from 'react';
+import styled from 'styled-components';
 
-export const TodosContext = createContext(); // Criar Contexto 
+export const TodosContext = createContext(); // Cria Contexto 
+
+// Styled Components
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f4f9;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+`;
+
+const ContentWrapper = styled.div`
+  width: 400px;
+  max-width: 90%;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const TaskList = styled.div`
+  margin-top: 20px;
+`;
+
+const TaskLabel = styled.label`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+`;
+
+const TaskCheckbox = styled.input`
+  margin-right: 10px;
+`;
+
+const TaskText = styled.span`
+  flex: 1;
+`;
+
+const TaskButton = styled.button`
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  margin-left: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  &:first-child {
+    margin-left: auto;
+  }
+`;
+
+const EditInput = styled.input`
+  flex-grow: 1;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin-right: 10px;
+`;
 
 function App2() {
-// Var de estado que guarda as tarefas adicionadas -> inicializa com o conteúdo guardado em local storage ou vazio
-const [tasks, setTasks] = useState(() => {
-  const savedTasks = localStorage.getItem('tasks2');
-  return savedTasks ? JSON.parse(savedTasks) : []; 
-});
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem('tasks2');
+    return savedTasks ? JSON.parse(savedTasks) : []; 
+  });
 
-// Var de estado que guarda as tarefas selecionadas -> inicializa com o conteúdo guardado em local storage ou vazio
-const [selectedTasks, setSelectedTasks] = useState(() => {
-  const savedSelectedTasks = localStorage.getItem('selectedTasks2');
-  return savedSelectedTasks ? JSON.parse(savedSelectedTasks) : [];
-});
+  const [selectedTasks, setSelectedTasks] = useState(() => {
+    const savedSelectedTasks = localStorage.getItem('selectedTasks2');
+    return savedSelectedTasks ? JSON.parse(savedSelectedTasks) : [];
+  });
 
-// Var de estado que guarda o filtro atual -> inicializa com o conteúdo guardado em local storage ou por defeito 'all'
-const [filtroAtual, setFiltroAtual] = useState(() => {
-  return localStorage.getItem('filtroAtual2') || 'all';
-});
+  const [filtroAtual, setFiltroAtual] = useState(() => {
+    return localStorage.getItem('filtroAtual2') || 'all';
+  });
 
-const [editTask, setEditTask] = useState({}); // Estado para guardar as tarefas que estão em modo de edição
-const [novoValor, setNovoValor] = useState(""); // Estado que guarda o novo valor dado a uma tarefa
-const [tarefasExibidas, setTarefasExibidas] = useState([]); // var de estado que guarda as tarefas filtradas
+  const [editTask, setEditTask] = useState({});
+  const [novoValor, setNovoValor] = useState("");
+  const [tarefasExibidas, setTarefasExibidas] = useState([]);
 
-// Atualiza `localStorage` sempre que `tasks`, `selectedTasks` ou `filtroAtual` mudam
-useEffect(() => {
-  localStorage.setItem('tasks2', JSON.stringify(tasks));
-  localStorage.setItem('selectedTasks2', JSON.stringify(selectedTasks));
-  localStorage.setItem('filtroAtual2', filtroAtual);
-}, [tasks, selectedTasks, filtroAtual]);
+  useEffect(() => {
+    localStorage.setItem('tasks2', JSON.stringify(tasks));
+    localStorage.setItem('selectedTasks2', JSON.stringify(selectedTasks));
+    localStorage.setItem('filtroAtual2', filtroAtual);
+  }, [tasks, selectedTasks, filtroAtual]);
 
+  const setdados = (dadosFilho) => { 
+    setTasks([...tasks, dadosFilho]);  
+  };
 
-// mostrar o window pop up com a quantidade de To-Do's
-// function mostrarAlerta() {
-//   alert("Existem " + tasks.length + " itens na lista de Todos 2");
-// }
+  const setfiltro = (selectedFilter) => {
+    setFiltroAtual(selectedFilter);
+  };
 
-// useEffect(() => {
-//   mostrarAlerta()
-// }, []);
-
-
-//função de callback - tarefas adicionadas
-const setdados = (dadosFilho) => { 
-  setTasks([...tasks, dadosFilho]);  
-};
-
-// Callback para definir o filtro
-const setfiltro = (selectedFilter) => {
-  setFiltroAtual(selectedFilter);
-};
-
-// Função para atualizar `tarefasExibidas` quando `tasks`, `selectedTasks`, ou `filtroAtual` mudarem
-useEffect(() => {
-  if (filtroAtual === 'all') {
-    setTarefasExibidas(tasks);
-  } else if (filtroAtual === 'active') {
-    setTarefasExibidas(tasks.filter((_, index) => !selectedTasks.includes(index)));
-  } else if (filtroAtual === 'completed') {
-    setTarefasExibidas(tasks.filter((_, index) => selectedTasks.includes(index)));
-  }
-}, [tasks, selectedTasks, filtroAtual]);
-
-// Função que define a seleção das tarefas, sem permitir duplicados
-const handleCheckboxChange = (event, index) => {
-  const checkedTaskIndex = index; // Usa o índice para identificar a tarefa unicamente
-
-  if (event.target.checked) {
-    // Adiciona a tarefa a `selectedTasks` apenas se ainda não estiver presente
-    if (!selectedTasks.includes(checkedTaskIndex)) {
-      setSelectedTasks([...selectedTasks, checkedTaskIndex]);
+  useEffect(() => {
+    if (filtroAtual === 'all') {
+      setTarefasExibidas(tasks);
+    } else if (filtroAtual === 'active') {
+      setTarefasExibidas(tasks.filter((_, index) => !selectedTasks.includes(index)));
+    } else if (filtroAtual === 'completed') {
+      setTarefasExibidas(tasks.filter((_, index) => selectedTasks.includes(index)));
     }
-  } else {
-    // Remove a tarefa desmarcada de `selectedTasks`
-    setSelectedTasks(selectedTasks.filter(taskIndex => taskIndex !== checkedTaskIndex));
-  }
-};
+  }, [tasks, selectedTasks, filtroAtual]);
 
-//função que define a visibilidade da componente de edição
-const handleEdit = (index) => {
-  setEditTask(prevEditTask => ({
-    ...prevEditTask,
-    [index]: !prevEditTask[index] // Alterna o modo de edição da tarefa específica
-  }));
-};
+  const handleCheckboxChange = (event, index) => {
+    if (event.target.checked) {
+      setSelectedTasks(prev => [...prev, index]);
+    } else {
+      setSelectedTasks(prev => prev.filter(taskIndex => taskIndex !== index));
+    }
+  };
 
-//função para editar
-const editItem = (index, newValue) => {
-  const updatedTasks = [...tasks]; // cópia do array das tarefas p/ efetuar mudanças
+  const handleEdit = (index) => {
+    setEditTask(prevEditTask => ({
+      ...prevEditTask,
+      [index]: !prevEditTask[index]
+    }));
+  };
 
-  updatedTasks[index] = newValue; // Atualiza a tarefa no índice desejado
+  const editItem = (index, newValue) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index] = newValue;
+    setTasks(updatedTasks);
+    setEditTask(prev => ({ ...prev, [index]: false }));
+  };
 
-  setTasks(updatedTasks); // se salvar as mudanças -> atualizar o array tasks com o update tasks
-  setEditTask(prev => ({ ...prev, [index]: false })); // Desativa o modo de edição para essa tarefa
-};
+  const deleteItem = (index) => {
+    setTasks(tasks.filter((_, i) => i !== index));
+    setSelectedTasks(selectedTasks.filter(taskIndex => taskIndex !== index));
+  };
 
-//função para eliminar
-const deleteItem = (index) => {
-  setTasks(tasks.filter((_, i) => i !== index)); // elimina tarefa no array das tarefas
-  setSelectedTasks(selectedTasks.filter(taskIndex => taskIndex !== index)); // elimina tarefa no array das tarefas concluídas
-};
-
-
-
-console.log("array tarefas:", tasks);
-console.log("array tarefas concluídas:", selectedTasks);
-console.log("visibilidade da edição", editTask);
-console.log("novo valor", novoValor);
-
-return (
-  <TodosContext.Provider value={tasks.length}> {/* Provedor do contexto */}
-  <div className="App">
-    <TodoForm setdados={setdados} />
-
-    <p></p> {/* adicionar espaço entre checkboxes */}
-
-    <TodoListFilter setfiltro={setfiltro} filtroAtual={filtroAtual} />
-
-    {tarefasExibidas.map((item, index) => (
-      <>
-        <p></p> {/* adicionar espaço entre checkboxes */}
-        <label key={index}>
-          {editTask[index] ? (
-            <>
-              <input
-                defaultValue={item}
-                onChange={(e) => setNovoValor(e.target.value)} 
-              />
-              <button onClick={() => handleEdit(index)}>cancel</button>
-              <button onClick={() => editItem(index, novoValor)}>save</button>
-            </>
-          ) : (
-            <>
-              <input 
-                type="checkbox"
-                checked={selectedTasks.includes(index)}
-                onChange={(event) => handleCheckboxChange(event, index)}
-              />
-              {item}
-              <button onClick={() => handleEdit(index)}>edit</button>
-              <button onClick={() => deleteItem(index)}>delete</button>
-            </>
-          )}
-        </label>
-      </>
-    ))}
-  </div>
-  </TodosContext.Provider>
-
-);
+  return (
+    <TodosContext.Provider value={tasks.length}>
+      <AppContainer>
+        <ContentWrapper>
+          <TodoForm setdados={setdados} />
+          <TodoListFilter setfiltro={setfiltro} filtroAtual={filtroAtual} />
+          <TaskList>
+            {tarefasExibidas.map((item, index) => (
+              <TaskLabel key={index}>
+                {editTask[index] ? (
+                  <>
+                    <EditInput
+                      defaultValue={item}
+                      onChange={(e) => setNovoValor(e.target.value)} 
+                    />
+                    <TaskButton onClick={() => handleEdit(index)}>Cancel</TaskButton>
+                    <TaskButton onClick={() => editItem(index, novoValor)}>Save</TaskButton>
+                  </>
+                ) : (
+                  <>
+                    <TaskCheckbox 
+                      type="checkbox"
+                      checked={selectedTasks.includes(index)}
+                      onChange={(event) => handleCheckboxChange(event, index)}
+                    />
+                    <TaskText>{item}</TaskText>
+                    <TaskButton onClick={() => handleEdit(index)}>Edit</TaskButton>
+                    <TaskButton onClick={() => deleteItem(index)}>Delete</TaskButton>
+                  </>
+                )}
+              </TaskLabel>
+            ))}
+          </TaskList>
+        </ContentWrapper>
+      </AppContainer>
+    </TodosContext.Provider>
+  );
 }
 
 export default App2;

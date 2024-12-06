@@ -2,8 +2,6 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 // import { configureStore, createSlice, createAsyncThunk  } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-
-
 // ex3 - Multibanco
 const balanceSlice = createSlice({
   name: 'saldo',
@@ -106,3 +104,4 @@ const store = configureStore({
 });
 
 export default store;
+

@@ -1,4 +1,3 @@
-
 import React, {useState} from 'react';
 import { useSelector, useDispatch  } from 'react-redux';
 import { deposito, levantamento } from '../store';  // Importa as actions
@@ -7,7 +6,7 @@ function App3() {
 
 const [valor, setValor] = useState(0);
 
-  const saldo  = useSelector((state) => state.balance);
+const saldo = useSelector((state) => state.saldo.balance);
 
   const dispatch = useDispatch();
 

@@ -1,24 +1,32 @@
 import React from 'react';
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import PropTypes from 'prop-types';
 
+const FilterContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+`;
+
+const Button = styled.button`
+  flex: 1;
+  margin: 0 5px;
+  background: ${(props) => (props.active ? "#007bff" : "transparent")};
+  color: ${(props) => (props.active ? "white" : "#007bff")};
+  border: 2px solid #007bff;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+    color: white;
+  }
+`;
+
+
+
 function TodoListFilter2({ setfiltro, filtroAtual }) {
-
-  const Button = styled.button`
-    background: transparent;
-    border-radius: 3px;
-    border: 2px solid #BF4F74;
-    color: #BF4F74;
-    margin: 0 1em;
-    padding: 0.25em 1em;
-
-    ${props =>
-      props.$primary &&
-      css`
-        background: #BF4F74;
-        color: white;
-      `};
-  `;
 
   TodoListFilter2.propTypes = {
     setfiltro: PropTypes.func.isRequired, 
@@ -26,7 +34,7 @@ function TodoListFilter2({ setfiltro, filtroAtual }) {
   };
 
   return (
-    <div>  
+    <FilterContainer>  
       <Button $primary
         onClick={() => setfiltro("all")} 
         style={{ fontWeight: filtroAtual === "all" ? 'bold' : 'normal' }}
@@ -41,7 +49,7 @@ function TodoListFilter2({ setfiltro, filtroAtual }) {
         onClick={() => setfiltro("completed")} 
         style={{ fontWeight: filtroAtual === "completed" ? 'bold' : 'normal' }}
       >Completed</Button>
-    </div>
+    </FilterContainer>
   );
 }
 
